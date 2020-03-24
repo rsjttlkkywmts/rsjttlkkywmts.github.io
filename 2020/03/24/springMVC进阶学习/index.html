@@ -2,9 +2,9 @@
 <html>
 <head>
   <meta charset="utf-8">
-  <title>spring进阶学习 | 胡帅的博客</title>
+  <title>springMVC进阶学习 | 胡帅的博客</title>
   <meta name="keywords" content=" SpringMVC , Java ">
-  <meta name="description" content="spring进阶学习 | 胡帅的博客">
+  <meta name="description" content="springMVC进阶学习 | 胡帅的博客">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 <meta name="description" content="第一个SpringMVC(配置版) 新建一个module或者project，然后为这个module添加framework support。   然后记得把所有的包在装在一个lib文件中，🆗，我知道你肯定会想起来在project structure中配置这玩意，这对你来说简直是轻而易举！  顺便看一下应该导入的哪些包，是不？导包总是一件很重要的事情。 Junit、spring-webmvc、jav">
 <meta property="og:type" content="article">
@@ -292,10 +292,10 @@
         </a>
         
         <a  class="Java SpringMVC "
-           href="/2020/03/24/spring%E8%BF%9B%E9%98%B6%E5%AD%A6%E4%B9%A0/"
+           href="/2020/03/24/springMVC%E8%BF%9B%E9%98%B6%E5%AD%A6%E4%B9%A0/"
            data-tag="SpringMVC,Java"
            data-author="" >
-            <span class="post-title" title="spring进阶学习">spring进阶学习</span>
+            <span class="post-title" title="springMVC进阶学习">springMVC进阶学习</span>
             <span class="post-date" title="2020-03-24 21:50:58">2020/03/24</span>
         </a>
         
@@ -311,9 +311,9 @@
 </aside>
 <div class="post">
     <div class="pjax">
-        <article id="post-spring进阶学习" class="article article-type-post" itemscope itemprop="blogPost">
+        <article id="post-springMVC进阶学习" class="article article-type-post" itemscope itemprop="blogPost">
     
-        <h1 class="article-title">spring进阶学习</h1>
+        <h1 class="article-title">springMVC进阶学习</h1>
     
     <div class="article-meta">
         
@@ -339,7 +339,7 @@
     </div>
     <div class="article-meta">
         
-        创建时间:<time class="date" title='更新时间: 2020-03-24 22:34:28'>2020-03-24 21:50</time>
+        创建时间:<time class="date" title='更新时间: 2020-03-24 22:37:00'>2020-03-24 21:50</time>
         
     </div>
     <div class="article-meta">
@@ -379,9 +379,9 @@
       
         <h1 id="👍Spring再踏一步"><a href="#👍Spring再踏一步" class="headerlink" title="👍Spring再踏一步"></a>👍Spring再踏一步</h1><h2 id="注解好用嘞"><a href="#注解好用嘞" class="headerlink" title="注解好用嘞"></a>注解好用嘞</h2><p>上次我们要Controller实现一个Controller接口，或者用@Controller接口(在用Conroller接口时记得开扫描包哦)。</p>
 <p>如果我们用了@Controller注解，那么这个类中的所有方法，如果返回值是String，并且有具体页面可以跳转，那么就会被视图解析器解析。(与实现接口不同，因为接口里面需要modelAndView.setViewName(“xxx.jsp”))</p>
-<p><img src="/2020/03/24/spring%E8%BF%9B%E9%98%B6%E5%AD%A6%E4%B9%A0/1.png" alt></p>
+<p><img src="/2020/03/24/springMVC%E8%BF%9B%E9%98%B6%E5%AD%A6%E4%B9%A0/1.png" alt></p>
 <p>你甚至可以在类外面再加一个<strong>@RequestMapping(“xxxx”)</strong>，这样可以让层次更加清晰。超方便是不是 😁</p>
-<p><img src="/2020/03/24/spring%E8%BF%9B%E9%98%B6%E5%AD%A6%E4%B9%A0/2.jpg" alt="嘻嘻"></p>
+<p><img src="/2020/03/24/springMVC%E8%BF%9B%E9%98%B6%E5%AD%A6%E4%B9%A0/2.jpg" alt="嘻嘻"></p>
 <h2 id="过滤器"><a href="#过滤器" class="headerlink" title="过滤器"></a>过滤器</h2><p>这么久没用过滤器，是不是不会写了呢？我就知道你不会写了。</p>
 <p>看着<strong>EncodingFilter</strong></p>
 <pre><code class="java">@WebFilter(filterName = &quot;encoding&quot;,urlPatterns = {&quot;/*&quot;})
@@ -406,9 +406,9 @@ public class EncodingFilter implements Filter {
 }</code></pre>
 <p>尤其要记住==@WebFilter(filterName = “encoding”,urlPatterns = {“/*”})==,注解版的注册filter，再也不用去web.xml里手写了。</p>
 <p>但是这里有个坑，你可能发现为撒子突然用不了@WebFilter和@WebServlet，明明加了依赖，可就是不行，==因为你没有add tomcat的包==</p>
-<p><img src="/2020/03/24/spring%E8%BF%9B%E9%98%B6%E5%AD%A6%E4%B9%A0/3.png" alt></p>
-<h2 id="小技巧"><a href="#小技巧" class="headerlink" title="小技巧"></a>小技巧</h2><h4 id="你可以用这种方法来实现重定向或者转发。"><a href="#你可以用这种方法来实现重定向或者转发。" class="headerlink" title="你可以用这种方法来实现重定向或者转发。"></a>你可以用这种方法来实现重定向或者转发。</h4><p><img src="/2020/03/24/spring%E8%BF%9B%E9%98%B6%E5%AD%A6%E4%B9%A0/4.jpg" alt></p>
-<h4 id="RestFul风格我一直没太懂，在此仅仅记录一下吧。"><a href="#RestFul风格我一直没太懂，在此仅仅记录一下吧。" class="headerlink" title="RestFul风格我一直没太懂，在此仅仅记录一下吧。"></a>RestFul风格我一直没太懂，在此仅仅记录一下吧。</h4><p><img src="/2020/03/24/spring%E8%BF%9B%E9%98%B6%E5%AD%A6%E4%B9%A0/5.jpg" alt></p>
+<p><img src="/2020/03/24/springMVC%E8%BF%9B%E9%98%B6%E5%AD%A6%E4%B9%A0/3.png" alt></p>
+<h2 id="小技巧"><a href="#小技巧" class="headerlink" title="小技巧"></a>小技巧</h2><h4 id="你可以用这种方法来实现重定向或者转发。"><a href="#你可以用这种方法来实现重定向或者转发。" class="headerlink" title="你可以用这种方法来实现重定向或者转发。"></a>你可以用这种方法来实现重定向或者转发。</h4><p><img src="/2020/03/24/springMVC%E8%BF%9B%E9%98%B6%E5%AD%A6%E4%B9%A0/4.jpg" alt></p>
+<h4 id="RestFul风格我一直没太懂，在此仅仅记录一下吧。"><a href="#RestFul风格我一直没太懂，在此仅仅记录一下吧。" class="headerlink" title="RestFul风格我一直没太懂，在此仅仅记录一下吧。"></a>RestFul风格我一直没太懂，在此仅仅记录一下吧。</h4><p><img src="/2020/03/24/springMVC%E8%BF%9B%E9%98%B6%E5%AD%A6%E4%B9%A0/5.jpg" alt></p>
 <p>可以用注解表明前端传来的参数 || 前端来的是一个对象怎么办？</p>
 <pre><code class="java">@Controller
 @RequestMapping(&quot;/user&quot;)
@@ -448,12 +448,12 @@ public class UserController {
 
 
 <div class="article_copyright">
-    <p><span class="copy-title">文章标题:</span>spring进阶学习</p>
+    <p><span class="copy-title">文章标题:</span>springMVC进阶学习</p>
     
     <p><span class="copy-title">本文作者:</span><a  title="finajoy">finajoy</a></p>
     <p><span class="copy-title">发布时间:</span>2020-03-24, 21:50:58</p>
-    <p><span class="copy-title">最后更新:</span>2020-03-24, 22:34:28</p>
-    <span class="copy-title">原始链接:</span><a class="post-url" href="/2020/03/24/spring%E8%BF%9B%E9%98%B6%E5%AD%A6%E4%B9%A0/" title="spring进阶学习">https://rsjttlkkywmts.github.io/2020/03/24/spring%E8%BF%9B%E9%98%B6%E5%AD%A6%E4%B9%A0/</a>
+    <p><span class="copy-title">最后更新:</span>2020-03-24, 22:37:00</p>
+    <span class="copy-title">原始链接:</span><a class="post-url" href="/2020/03/24/springMVC%E8%BF%9B%E9%98%B6%E5%AD%A6%E4%B9%A0/" title="springMVC进阶学习">https://rsjttlkkywmts.github.io/2020/03/24/springMVC%E8%BF%9B%E9%98%B6%E5%AD%A6%E4%B9%A0/</a>
     <p>
         <span class="copy-title">版权声明:</span><i class="fa fa-creative-commons"></i> <a rel="license noopener" href="http://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank" title="CC BY-NC-SA 4.0 International" target = "_blank">"署名-非商用-相同方式共享 4.0"</a> 转载请保留原文链接及作者。
     </p>
