@@ -2,9 +2,9 @@
 <html>
 <head>
   <meta charset="utf-8">
-  <title>SpringMVC的执行流程 | 胡帅的博客</title>
-  <meta name="keywords" content=" SpringMVC ">
-  <meta name="description" content="SpringMVC的执行流程 | 胡帅的博客">
+  <title>spring进阶学习 | 胡帅的博客</title>
+  <meta name="keywords" content=" SpringMVC , Java ">
+  <meta name="description" content="spring进阶学习 | 胡帅的博客">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 <meta name="description" content="第一个SpringMVC(配置版) 新建一个module或者project，然后为这个module添加framework support。   然后记得把所有的包在装在一个lib文件中，🆗，我知道你肯定会想起来在project structure中配置这玩意，这对你来说简直是轻而易举！  顺便看一下应该导入的哪些包，是不？导包总是一件很重要的事情。 Junit、spring-webmvc、jav">
 <meta property="og:type" content="article">
@@ -311,9 +311,9 @@
 </aside>
 <div class="post">
     <div class="pjax">
-        <article id="post-SpringMVC的执行流程" class="article article-type-post" itemscope itemprop="blogPost">
+        <article id="post-spring进阶学习" class="article article-type-post" itemscope itemprop="blogPost">
     
-        <h1 class="article-title">SpringMVC的执行流程</h1>
+        <h1 class="article-title">spring进阶学习</h1>
     
     <div class="article-meta">
         
@@ -321,7 +321,7 @@
         
         <span class="book">
             
-                <a  data-rel="java">java</a>/
+                <a  data-rel="Java">Java</a>/
             
                 <a  data-rel="SpringMVC">SpringMVC</a>
             
@@ -332,12 +332,14 @@
             
             <a class="color5">SpringMVC</a>
             
+            <a class="color5">Java</a>
+            
         </span>
         
     </div>
     <div class="article-meta">
         
-        创建时间:<time class="date" title='更新时间: 2020-03-22 09:23:07'>2020-03-21 21:22</time>
+        创建时间:<time class="date" title='更新时间: 2020-03-24 22:34:28'>2020-03-24 21:50</time>
         
     </div>
     <div class="article-meta">
@@ -359,7 +361,7 @@
     
     <div class="toc-ref">
     
-        <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#回顾Servlet"><span class="toc-text">回顾Servlet</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#回顾MVC"><span class="toc-text">回顾MVC</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#SpringMVC-什么是SpringMVC"><span class="toc-text">SpringMVC:  什么是SpringMVC</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#它是Spring-FrameWork的一部分，是基于Java实现的轻量级的Web框架。"><span class="toc-text">它是Spring FrameWork的一部分，是基于Java实现的轻量级的Web框架。</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#中心控制器"><span class="toc-text">中心控制器</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#SpringMVC的执行流程"><span class="toc-text">SpringMVC的执行流程</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#SpringMVC执行流程简要分析"><span class="toc-text">SpringMVC执行流程简要分析</span></a></li></ol></li></ol>
+        <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#👍Spring再踏一步"><span class="toc-text">👍Spring再踏一步</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#注解好用嘞"><span class="toc-text">注解好用嘞</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#过滤器"><span class="toc-text">过滤器</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#小技巧"><span class="toc-text">小技巧</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#你可以用这种方法来实现重定向或者转发。"><span class="toc-text">你可以用这种方法来实现重定向或者转发。</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#RestFul风格我一直没太懂，在此仅仅记录一下吧。"><span class="toc-text">RestFul风格我一直没太懂，在此仅仅记录一下吧。</span></a></li></ol></li></ol></li></ol></li></ol>
     
 <style>
     .left-col .switch-btn,
@@ -375,71 +377,64 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        <h3 id="回顾Servlet"><a href="#回顾Servlet" class="headerlink" title="回顾Servlet"></a>回顾Servlet</h3><p>首先，什么是Servlet？有时我总是忘记Servlet是什么😭。</p>
-<p>Servlet是运行在Web服务器或者应用服务器上的程序,是Java Servlet的简称,称为小服务程序或者服务连接器.</p>
-<hr>
-<h3 id="回顾MVC"><a href="#回顾MVC" class="headerlink" title="回顾MVC"></a>回顾MVC</h3><p>说到SpringMVC,那么就不得不说到MVC模式,MVC是Model、View、Controller的简称，<strong>他是一种架构模式</strong>，<strong>而非设计模式</strong>  ，主要作用是：降低了<strong>视图与逻辑业务间的双向耦合</strong><br>MVC执行流程：</p>
-<ol>
-<li>用户从客户端发出请求</li>
-<li>Servlet接收请求，并调用对应的业务逻辑方法</li>
-<li>业务处理完毕后，返回更新后的数据给Servlet</li>
-<li>Servlet转向到jsp，jsp渲染页面</li>
-<li>响应给前端更新后的页面</li>
-</ol>
-<p>职责分析：</p>
-<ol>
-<li>Controller：😀取得表单数据 😀调用业务逻辑 😀转向给指定的页面</li>
-<li>Model：​😡​业务处理 😈保存数据的状态 </li>
-<li>View: 😾显示页面</li>
-</ol>
-<p>使用Servlet需要的包：<strong>servlet-api、jsp-api、jstl</strong></p>
-<pre><code class="xml">&lt;dependencies&gt;
-    &lt;dependency&gt;
-        &lt;groupId&gt;javax.servlet&lt;/groupId&gt;
-        &lt;artifactId&gt;servlet-api&lt;/artifactId&gt;
-        &lt;version&gt;2.5&lt;/version&gt;
-    &lt;/dependency&gt;
-    &lt;dependency&gt;
-        &lt;groupId&gt;javax.servlet.jsp&lt;/groupId&gt;
-        &lt;artifactId&gt;jsp-api&lt;/artifactId&gt;
-        &lt;version&gt;2.2&lt;/version&gt;
-    &lt;/dependency&gt;
-    &lt;dependency&gt;
-        &lt;groupId&gt;javax.servlet&lt;/groupId&gt;
-        &lt;artifactId&gt;jstl&lt;/artifactId&gt;
-        &lt;version&gt;1.2&lt;/version&gt;
-    &lt;/dependency&gt;
-&lt;/dependencies&gt;</code></pre>
-<hr>
-<h3 id="SpringMVC-什么是SpringMVC"><a href="#SpringMVC-什么是SpringMVC" class="headerlink" title="SpringMVC:  什么是SpringMVC"></a>SpringMVC:  什么是SpringMVC</h3><p><img src="https://blog.kuangstudy.com/usr/uploads/2019/10/3030654365.png" alt="logo"></p>
-<h4 id="它是Spring-FrameWork的一部分，是基于Java实现的轻量级的Web框架。"><a href="#它是Spring-FrameWork的一部分，是基于Java实现的轻量级的Web框架。" class="headerlink" title="它是Spring FrameWork的一部分，是基于Java实现的轻量级的Web框架。"></a>它是Spring FrameWork的一部分，是基于Java实现的轻量级的Web框架。</h4><hr>
-<h4 id="中心控制器"><a href="#中心控制器" class="headerlink" title="中心控制器"></a>中心控制器</h4><p>Spring的Web框架围绕着DispatcherServlet设计，DispatcherServlet的作用是将不同的请求分发到不同的处理器。SpringMVC框架像其他MVC框架一样，以请求为驱动，围绕这个一个中心Servlet分派请求以及提供其他功能。</p>
-<hr>
-<h4 id="SpringMVC的执行流程"><a href="#SpringMVC的执行流程" class="headerlink" title="SpringMVC的执行流程"></a>SpringMVC的执行流程</h4><p><img src="https://blog.kuangstudy.com/usr/uploads/2019/10/2905833713.png" alt="执行流程图"></p>
-<p>当发起请求被前端控制器拦截，根据请求的的参数生成代理请求(代理请求不甚了解)，找到对应的实际控制器，控制器处理请求，创建数据模型，访问数据库，将模型返回给中心控制器，前端控制器使用模型和视图渲染结果，将结果返回给中心控制器，产生响应返回给客户端。</p>
-<hr>
-<h4 id="SpringMVC执行流程简要分析"><a href="#SpringMVC执行流程简要分析" class="headerlink" title="SpringMVC执行流程简要分析"></a>SpringMVC执行流程简要分析</h4><p><img src="https://blog.kuangstudy.com/usr/uploads/2019/10/63825124.png" alt="这里用下秦疆老师的图，我爱秦老师"></p>
-<ol>
-<li>用户发出请求，被DispatcherServlet（中心控制器）拦截，并处理请求。<ul>
-<li>我们假设请求的url为：<a href="http://localhost:8090/SpringMVC/hello" target="_blank" rel="noopener">http://localhost:8090/SpringMVC/hello</a></li>
-<li>上面的url会拆成三部分：<ul>
-<li><a href="http://localhost:8090" target="_blank" rel="noopener">http://localhost:8090</a> 服务器域名</li>
-<li>SpringMVC 部署在服务器上的站点</li>
-<li>hello表示控制器</li>
-</ul>
-</li>
-<li>得出：请求位于服务器上localhost:8090上的SpringMVC站点上的hello控制器</li>
-</ul>
-</li>
-<li>HandleMapping为处理器映射。DispatcherServlet调用HandlerMapping，HandlerMapping根据url查找Handler。</li>
-<li>HandlerExecution是具体的Handler。其主要作用是根据url查找具体的控制器，如上url查找的控制器为hello</li>
-<li><strong>HandlerAdapter表示处理器适配器，其按照具体的规则执行Handler</strong></li>
-<li>控制器返回执行信息（如ModelAndView）给HandlerAdapter</li>
-<li>HandlerAdapter将视图逻辑名或模型传递DispatcherServlet。</li>
-<li>DisptcherServlet调用视图解析器（ViewResolver）来解析视图逻辑名。</li>
-<li>视图解析器将解析的视图名返回给DispatcherServlet根据视图解析器解析的视图结果调用具体的视图。</li>
-<li>最终视图呈现给用户。</li>
-</ol>
+        <h1 id="👍Spring再踏一步"><a href="#👍Spring再踏一步" class="headerlink" title="👍Spring再踏一步"></a>👍Spring再踏一步</h1><h2 id="注解好用嘞"><a href="#注解好用嘞" class="headerlink" title="注解好用嘞"></a>注解好用嘞</h2><p>上次我们要Controller实现一个Controller接口，或者用@Controller接口(在用Conroller接口时记得开扫描包哦)。</p>
+<p>如果我们用了@Controller注解，那么这个类中的所有方法，如果返回值是String，并且有具体页面可以跳转，那么就会被视图解析器解析。(与实现接口不同，因为接口里面需要modelAndView.setViewName(“xxx.jsp”))</p>
+<p><img src="/2020/03/24/spring%E8%BF%9B%E9%98%B6%E5%AD%A6%E4%B9%A0/1.png" alt></p>
+<p>你甚至可以在类外面再加一个<strong>@RequestMapping(“xxxx”)</strong>，这样可以让层次更加清晰。超方便是不是 😁</p>
+<p><img src="/2020/03/24/spring%E8%BF%9B%E9%98%B6%E5%AD%A6%E4%B9%A0/2.jpg" alt="嘻嘻"></p>
+<h2 id="过滤器"><a href="#过滤器" class="headerlink" title="过滤器"></a>过滤器</h2><p>这么久没用过滤器，是不是不会写了呢？我就知道你不会写了。</p>
+<p>看着<strong>EncodingFilter</strong></p>
+<pre><code class="java">@WebFilter(filterName = &quot;encoding&quot;,urlPatterns = {&quot;/*&quot;})
+public class EncodingFilter implements Filter {
+    @Override
+    public void init(FilterConfig filterConfig) throws ServletException {
+
+    }
+
+    @Override
+    public void doFilter(ServletRequest request, ServletResponse response, FilterChain filterChain) throws IOException, ServletException {
+        request.setCharacterEncoding(&quot;utf-8&quot;);
+        response.setCharacterEncoding(&quot;utf-8&quot;);
+        response.setContentType(&quot;utf-8&quot;);
+        filterChain.doFilter(request,response);
+    }
+
+    @Override
+    public void destroy() {
+
+    }
+}</code></pre>
+<p>尤其要记住==@WebFilter(filterName = “encoding”,urlPatterns = {“/*”})==,注解版的注册filter，再也不用去web.xml里手写了。</p>
+<p>但是这里有个坑，你可能发现为撒子突然用不了@WebFilter和@WebServlet，明明加了依赖，可就是不行，==因为你没有add tomcat的包==</p>
+<p><img src="/2020/03/24/spring%E8%BF%9B%E9%98%B6%E5%AD%A6%E4%B9%A0/3.png" alt></p>
+<h2 id="小技巧"><a href="#小技巧" class="headerlink" title="小技巧"></a>小技巧</h2><h4 id="你可以用这种方法来实现重定向或者转发。"><a href="#你可以用这种方法来实现重定向或者转发。" class="headerlink" title="你可以用这种方法来实现重定向或者转发。"></a>你可以用这种方法来实现重定向或者转发。</h4><p><img src="/2020/03/24/spring%E8%BF%9B%E9%98%B6%E5%AD%A6%E4%B9%A0/4.jpg" alt></p>
+<h4 id="RestFul风格我一直没太懂，在此仅仅记录一下吧。"><a href="#RestFul风格我一直没太懂，在此仅仅记录一下吧。" class="headerlink" title="RestFul风格我一直没太懂，在此仅仅记录一下吧。"></a>RestFul风格我一直没太懂，在此仅仅记录一下吧。</h4><p><img src="/2020/03/24/spring%E8%BF%9B%E9%98%B6%E5%AD%A6%E4%B9%A0/5.jpg" alt></p>
+<p>可以用注解表明前端传来的参数 || 前端来的是一个对象怎么办？</p>
+<pre><code class="java">@Controller
+@RequestMapping(&quot;/user&quot;)
+public class UserController {
+    @GetMapping(&quot;/t1&quot;)
+    public String test1(@RequestParam(&quot;skrname&quot;) String name, Model model){
+        //1.接受前端参数
+        System.out.println(&quot;接收到前端的参数为：&quot; + name);
+
+        //2.将返回的结果传递给前端,model
+        model.addAttribute(&quot;msg&quot;,name);
+
+        //3.跳转视图
+        return &quot;test1&quot;;
+    }
+    //前端接收到的是一个对象
+    /*
+    * 1.接受前端用户传递的参数，判断参数的名字，假设名字直接在方法上，可以直接使用
+    * 2.假设用户传递的是一个对象User,匹配User对象中的字段名：如果名字一致则Ok，否则，匹配不到
+    */
+    @RequestMapping(&quot;/t2&quot;)
+    public String test2(User user){
+        System.out.println(user);
+        return &quot;test1&quot;;
+    }
+}</code></pre>
 
       
        <hr><span style="font-style: italic;color: gray;"> 转载请注明来源，欢迎对文章中的引用来源进行考证，欢迎指出任何有错误或不够清晰的表达。可以在下面评论区评论，也可以邮件至 1044667963@qq.com </span>
@@ -453,12 +448,12 @@
 
 
 <div class="article_copyright">
-    <p><span class="copy-title">文章标题:</span>SpringMVC的执行流程</p>
+    <p><span class="copy-title">文章标题:</span>spring进阶学习</p>
     
     <p><span class="copy-title">本文作者:</span><a  title="finajoy">finajoy</a></p>
-    <p><span class="copy-title">发布时间:</span>2020-03-21, 21:22:45</p>
-    <p><span class="copy-title">最后更新:</span>2020-03-22, 09:23:07</p>
-    <span class="copy-title">原始链接:</span><a class="post-url" href="/2020/03/21/SpringMVC%E7%9A%84%E6%89%A7%E8%A1%8C%E6%B5%81%E7%A8%8B/" title="SpringMVC的执行流程">https://rsjttlkkywmts.github.io/2020/03/21/SpringMVC%E7%9A%84%E6%89%A7%E8%A1%8C%E6%B5%81%E7%A8%8B/</a>
+    <p><span class="copy-title">发布时间:</span>2020-03-24, 21:50:58</p>
+    <p><span class="copy-title">最后更新:</span>2020-03-24, 22:34:28</p>
+    <span class="copy-title">原始链接:</span><a class="post-url" href="/2020/03/24/spring%E8%BF%9B%E9%98%B6%E5%AD%A6%E4%B9%A0/" title="spring进阶学习">https://rsjttlkkywmts.github.io/2020/03/24/spring%E8%BF%9B%E9%98%B6%E5%AD%A6%E4%B9%A0/</a>
     <p>
         <span class="copy-title">版权声明:</span><i class="fa fa-creative-commons"></i> <a rel="license noopener" href="http://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank" title="CC BY-NC-SA 4.0 International" target = "_blank">"署名-非商用-相同方式共享 4.0"</a> 转载请保留原文链接及作者。
     </p>
