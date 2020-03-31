@@ -2,9 +2,9 @@
 <html>
 <head>
   <meta charset="utf-8">
-  <title>SpringMVC的执行流程 | 胡帅的博客</title>
-  <meta name="keywords" content=" SpringMVC ">
-  <meta name="description" content="SpringMVC的执行流程 | 胡帅的博客">
+  <title>SpringMVC 拦截器 | 胡帅的博客</title>
+  <meta name="keywords" content=" springmvc ">
+  <meta name="description" content="SpringMVC 拦截器 | 胡帅的博客">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 <meta name="description" content="Ajax初体验老规矩，什么是Ajax？ 首先声明，Ajax不是一种变成语言，而是一种方法。它的全称叫Asynchronous JavaScript and XML(异步的请求和XML)；是不是和我一样一脸懵逼，啥玩意？异步？😂 他的作用就是可以在不刷新整个网页的情况下，实现与服务器交换数据并局部刷新网页的技术。 使用此项技术的前提是需要学习过JavaScript语言，HTML和CSS会用就行。">
 <meta property="og:type" content="article">
@@ -340,33 +340,25 @@
 </aside>
 <div class="post">
     <div class="pjax">
-        <article id="post-SpringMVC的执行流程" class="article article-type-post" itemscope itemprop="blogPost">
+        <article id="post-SpringMVC-拦截器" class="article article-type-post" itemscope itemprop="blogPost">
     
-        <h1 class="article-title">SpringMVC的执行流程</h1>
+        <h1 class="article-title">SpringMVC 拦截器</h1>
     
     <div class="article-meta">
         
         
         
-        <span class="book">
-            
-                <a  data-rel="java">java</a>/
-            
-                <a  data-rel="SpringMVC">SpringMVC</a>
-            
-        </span>
-        
         
         <span class="tag">
             
-            <a class="color5">SpringMVC</a>
+            <a class="color5">springmvc</a>
             
         </span>
         
     </div>
     <div class="article-meta">
         
-        创建时间:<time class="date" title='更新时间: 2020-03-22 09:23:07'>2020-03-21 21:22</time>
+        创建时间:<time class="date" title='更新时间: 2020-03-31 12:26:04'>2020-03-31 12:25</time>
         
     </div>
     <div class="article-meta">
@@ -388,7 +380,7 @@
     
     <div class="toc-ref">
     
-        <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#回顾Servlet"><span class="toc-text">回顾Servlet</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#回顾MVC"><span class="toc-text">回顾MVC</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#SpringMVC-什么是SpringMVC"><span class="toc-text">SpringMVC:  什么是SpringMVC</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#它是Spring-FrameWork的一部分，是基于Java实现的轻量级的Web框架。"><span class="toc-text">它是Spring FrameWork的一部分，是基于Java实现的轻量级的Web框架。</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#中心控制器"><span class="toc-text">中心控制器</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#SpringMVC的执行流程"><span class="toc-text">SpringMVC的执行流程</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#SpringMVC执行流程简要分析"><span class="toc-text">SpringMVC执行流程简要分析</span></a></li></ol></li></ol>
+        <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#概述——开门知意"><span class="toc-text">概述——开门知意</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#演示一个小demo"><span class="toc-text">演示一个小demo</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#web-xml"><span class="toc-text">web.xml</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#ApplicationContext-xml"><span class="toc-text">ApplicationContext.xml</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#拦截器"><span class="toc-text">拦截器</span></a></li></ol>
     
 <style>
     .left-col .switch-btn,
@@ -404,71 +396,150 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        <h3 id="回顾Servlet"><a href="#回顾Servlet" class="headerlink" title="回顾Servlet"></a>回顾Servlet</h3><p>首先，什么是Servlet？有时我总是忘记Servlet是什么😭。</p>
-<p>Servlet是运行在Web服务器或者应用服务器上的程序,是Java Servlet的简称,称为小服务程序或者服务连接器.</p>
-<hr>
-<h3 id="回顾MVC"><a href="#回顾MVC" class="headerlink" title="回顾MVC"></a>回顾MVC</h3><p>说到SpringMVC,那么就不得不说到MVC模式,MVC是Model、View、Controller的简称，<strong>他是一种架构模式</strong>，<strong>而非设计模式</strong>  ，主要作用是：降低了<strong>视图与逻辑业务间的双向耦合</strong><br>MVC执行流程：</p>
-<ol>
-<li>用户从客户端发出请求</li>
-<li>Servlet接收请求，并调用对应的业务逻辑方法</li>
-<li>业务处理完毕后，返回更新后的数据给Servlet</li>
-<li>Servlet转向到jsp，jsp渲染页面</li>
-<li>响应给前端更新后的页面</li>
-</ol>
-<p>职责分析：</p>
-<ol>
-<li>Controller：😀取得表单数据 😀调用业务逻辑 😀转向给指定的页面</li>
-<li>Model：​😡​业务处理 😈保存数据的状态 </li>
-<li>View: 😾显示页面</li>
-</ol>
-<p>使用Servlet需要的包：<strong>servlet-api、jsp-api、jstl</strong></p>
-<pre><code class="xml">&lt;dependencies&gt;
-    &lt;dependency&gt;
-        &lt;groupId&gt;javax.servlet&lt;/groupId&gt;
-        &lt;artifactId&gt;servlet-api&lt;/artifactId&gt;
-        &lt;version&gt;2.5&lt;/version&gt;
-    &lt;/dependency&gt;
-    &lt;dependency&gt;
-        &lt;groupId&gt;javax.servlet.jsp&lt;/groupId&gt;
-        &lt;artifactId&gt;jsp-api&lt;/artifactId&gt;
-        &lt;version&gt;2.2&lt;/version&gt;
-    &lt;/dependency&gt;
-    &lt;dependency&gt;
-        &lt;groupId&gt;javax.servlet&lt;/groupId&gt;
-        &lt;artifactId&gt;jstl&lt;/artifactId&gt;
-        &lt;version&gt;1.2&lt;/version&gt;
-    &lt;/dependency&gt;
-&lt;/dependencies&gt;</code></pre>
-<hr>
-<h3 id="SpringMVC-什么是SpringMVC"><a href="#SpringMVC-什么是SpringMVC" class="headerlink" title="SpringMVC:  什么是SpringMVC"></a>SpringMVC:  什么是SpringMVC</h3><p><img src="https://blog.kuangstudy.com/usr/uploads/2019/10/3030654365.png" alt="logo"></p>
-<h4 id="它是Spring-FrameWork的一部分，是基于Java实现的轻量级的Web框架。"><a href="#它是Spring-FrameWork的一部分，是基于Java实现的轻量级的Web框架。" class="headerlink" title="它是Spring FrameWork的一部分，是基于Java实现的轻量级的Web框架。"></a>它是Spring FrameWork的一部分，是基于Java实现的轻量级的Web框架。</h4><hr>
-<h4 id="中心控制器"><a href="#中心控制器" class="headerlink" title="中心控制器"></a>中心控制器</h4><p>Spring的Web框架围绕着DispatcherServlet设计，DispatcherServlet的作用是将不同的请求分发到不同的处理器。SpringMVC框架像其他MVC框架一样，以请求为驱动，围绕这个一个中心Servlet分派请求以及提供其他功能。</p>
-<hr>
-<h4 id="SpringMVC的执行流程"><a href="#SpringMVC的执行流程" class="headerlink" title="SpringMVC的执行流程"></a>SpringMVC的执行流程</h4><p><img src="https://blog.kuangstudy.com/usr/uploads/2019/10/2905833713.png" alt="执行流程图"></p>
-<p>当发起请求被前端控制器拦截，根据请求的的参数生成代理请求(代理请求不甚了解)，找到对应的实际控制器，控制器处理请求，创建数据模型，访问数据库，将模型返回给中心控制器，前端控制器使用模型和视图渲染结果，将结果返回给中心控制器，产生响应返回给客户端。</p>
-<hr>
-<h4 id="SpringMVC执行流程简要分析"><a href="#SpringMVC执行流程简要分析" class="headerlink" title="SpringMVC执行流程简要分析"></a>SpringMVC执行流程简要分析</h4><p><img src="https://blog.kuangstudy.com/usr/uploads/2019/10/63825124.png" alt="这里用下秦疆老师的图，我爱秦老师"></p>
-<ol>
-<li>用户发出请求，被DispatcherServlet（中心控制器）拦截，并处理请求。<ul>
-<li>我们假设请求的url为：<a href="http://localhost:8090/SpringMVC/hello" target="_blank" rel="noopener">http://localhost:8090/SpringMVC/hello</a></li>
-<li>上面的url会拆成三部分：<ul>
-<li><a href="http://localhost:8090" target="_blank" rel="noopener">http://localhost:8090</a> 服务器域名</li>
-<li>SpringMVC 部署在服务器上的站点</li>
-<li>hello表示控制器</li>
+        <h1 id="概述——开门知意"><a href="#概述——开门知意" class="headerlink" title="概述——开门知意"></a>概述——开门知意</h1><p>SpringMVC的处理器拦截器类似于Servlet中的过滤器，用于进行预处理或者后处理，开发者可以自定义拦截器的功能。但是拦截器和过滤器是有<span style="color:red">区别</span>的。</p>
+<ul>
+<li>拦截器是SpringMVC中的，只有使用SpringMVC框架的工程才能使用。</li>
+<li>拦截器只会拦截访问控制器的方法，如果访问是啥jsp啊、html、css、js啊之类的就不会拦截；</li>
 </ul>
+<center style="color:yellow">拦截器是AOP思想的具体应用</center>
+
+<p>其实拦截器和AOP切入基本上是一个样的。</p>
+<h1 id="演示一个小demo"><a href="#演示一个小demo" class="headerlink" title="演示一个小demo"></a>演示一个小demo</h1><p>既然是在SpringMVC中的拦截器，那必然是需要Spring的开发环境咯。</p>
+<h2 id="web-xml"><a href="#web-xml" class="headerlink" title="web.xml"></a>web.xml</h2><pre><code class="xml">&lt;!--web.xml--&gt;
+&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;
+&lt;web-app xmlns=&quot;http://xmlns.jcp.org/xml/ns/javaee&quot;
+         xmlns:xsi=&quot;http://www.w3.org/2001/XMLSchema-instance&quot;
+         xsi:schemaLocation=&quot;http://xmlns.jcp.org/xml/ns/javaee
+         http://xmlns.jcp.org/xml/ns/javaee/web-app_4_0.xsd&quot;
+         version=&quot;4.0&quot;&gt;
+    &lt;!--SpringMVC配置必配的DispatcherServlet--&gt;
+    &lt;servlet&gt;
+        &lt;servlet-name&gt;springmvc&lt;/servlet-name&gt;
+        &lt;servlet-class&gt;org.springframework.web.servlet.DispatcherServlet&lt;/servlet-class&gt;
+        &lt;init-param&gt;
+            &lt;param-name&gt;contextConfigLocation&lt;/param-name&gt;
+            &lt;param-value&gt;classpath:applicationContext.xml&lt;/param-value&gt;
+        &lt;/init-param&gt;
+        &lt;load-on-startup&gt;1&lt;/load-on-startup&gt;
+    &lt;/servlet&gt;
+    &lt;servlet-mapping&gt;
+        &lt;servlet-name&gt;springmvc&lt;/servlet-name&gt;
+        &lt;url-pattern&gt;/&lt;/url-pattern&gt;
+    &lt;/servlet-mapping&gt;
+    &lt;!--编码过滤器--&gt;
+    &lt;filter&gt;
+        &lt;filter-name&gt;encodingFilter&lt;/filter-name&gt;
+        &lt;filter-class&gt;org.springframework.web.filter.CharacterEncodingFilter&lt;/filter-class&gt;
+        &lt;init-param&gt;
+            &lt;param-name&gt;encoding&lt;/param-name&gt;
+            &lt;param-value&gt;utf-8&lt;/param-value&gt;
+        &lt;/init-param&gt;
+        &lt;init-param&gt;
+            &lt;param-name&gt;forceEncoding&lt;/param-name&gt;
+            &lt;param-value&gt;true&lt;/param-value&gt;
+        &lt;/init-param&gt;
+    &lt;/filter&gt;
+    &lt;filter-mapping&gt;
+        &lt;filter-name&gt;encodingFilter&lt;/filter-name&gt;
+        &lt;url-pattern&gt;/*&lt;/url-pattern&gt;
+    &lt;/filter-mapping&gt;
+&lt;/web-app&gt;</code></pre>
+<h2 id="ApplicationContext-xml"><a href="#ApplicationContext-xml" class="headerlink" title="ApplicationContext.xml"></a>ApplicationContext.xml</h2><pre><code class="xml">&lt;!--ApplicationContext.xml--&gt;
+&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;
+&lt;beans xmlns=&quot;http://www.springframework.org/schema/beans&quot;
+       xmlns:xsi=&quot;http://www.w3.org/2001/XMLSchema-instance&quot;
+       xmlns:context=&quot;http://www.springframework.org/schema/context&quot;
+       xmlns:mvc=&quot;http://www.springframework.org/schema/mvc&quot;
+       xsi:schemaLocation=&quot;http://www.springframework.org/schema/beans
+       http://www.springframework.org/schema/beans/spring-beans.xsd
+       http://www.springframework.org/schema/context
+       https://www.springframework.org/schema/context/spring-context.xsd
+       http://www.springframework.org/schema/mvc
+       https://www.springframework.org/schema/mvc/spring-mvc.xsd&quot;&gt;
+    &lt;!--包扫描--&gt;
+    &lt;context:component-scan base-package=&quot;com.finajoy.controller&quot;/&gt;
+    &lt;!--解决静态资源过滤--&gt;
+    &lt;mvc:default-servlet-handler/&gt;
+    &lt;!--注解驱动&amp;json乱码--&gt;
+    &lt;mvc:annotation-driven&gt;
+        &lt;mvc:message-converters register-defaults=&quot;true&quot;&gt;
+            &lt;bean class=&quot;org.springframework.http.converter.StringHttpMessageConverter&quot;&gt;
+                &lt;constructor-arg value=&quot;UTF-8&quot;/&gt;
+            &lt;/bean&gt;
+            &lt;bean class=&quot;org.springframework.http.converter.json.MappingJackson2HttpMessageConverter&quot;&gt;
+                &lt;property name=&quot;objectMapper&quot;&gt;
+                    &lt;bean class=&quot;org.springframework.http.converter.json.Jackson2ObjectMapperFactoryBean&quot;&gt;
+                        &lt;property name=&quot;failOnEmptyBeans&quot; value=&quot;false&quot;/&gt;
+                    &lt;/bean&gt;
+                &lt;/property&gt;
+            &lt;/bean&gt;
+        &lt;/mvc:message-converters&gt;
+    &lt;/mvc:annotation-driven&gt;
+    &lt;!--必须的视图解析器--&gt;
+    &lt;bean id=&quot;internalViewResolver&quot; class=&quot;org.springframework.web.servlet.view.InternalResourceViewResolver&quot;&gt;
+        &lt;property name=&quot;prefix&quot; value=&quot;/WEB-INF/jsp/&quot;/&gt;
+        &lt;property name=&quot;suffix&quot; value=&quot;.jsp&quot;/&gt;
+    &lt;/bean&gt;
+    &lt;!--一个拦截器必须要在spring中配置一个这样的玩意儿--&gt;
+    &lt;mvc:interceptors&gt;
+        &lt;mvc:interceptor&gt;
+            &lt;!--这里解释一下： **拦截所有文件夹 及其子文件夹
+            举例：/admin/**  admin下的所有
+            --&gt;
+            &lt;mvc:mapping path=&quot;/**&quot;/&gt;
+            &lt;bean class=&quot;com.finajoy.Interceptor.MyInterceptor&quot;/&gt;
+        &lt;/mvc:interceptor&gt;
+    &lt;/mvc:interceptors&gt;
+&lt;/beans&gt;</code></pre>
+<p>这里我有几点想说的</p>
+<ol>
+<li><p>从Controller返回的字符串也许会乱码，那是因为你没有配置json乱码</p>
 </li>
-<li>得出：请求位于服务器上localhost:8090上的SpringMVC站点上的hello控制器</li>
-</ul>
+<li><p>关于配置&lt;mvc:intercetors &gt; 中的’ ** ‘  和’ * ‘：</p>
+<p>?    匹配任何单字符         </p>
+<p>*    匹配0或者任意数量的字符         </p>
+<p>**    匹配0或者更多的目录 </p>
 </li>
-<li>HandleMapping为处理器映射。DispatcherServlet调用HandlerMapping，HandlerMapping根据url查找Handler。</li>
-<li>HandlerExecution是具体的Handler。其主要作用是根据url查找具体的控制器，如上url查找的控制器为hello</li>
-<li><strong>HandlerAdapter表示处理器适配器，其按照具体的规则执行Handler</strong></li>
-<li>控制器返回执行信息（如ModelAndView）给HandlerAdapter</li>
-<li>HandlerAdapter将视图逻辑名或模型传递DispatcherServlet。</li>
-<li>DisptcherServlet调用视图解析器（ViewResolver）来解析视图逻辑名。</li>
-<li>视图解析器将解析的视图名返回给DispatcherServlet根据视图解析器解析的视图结果调用具体的视图。</li>
-<li>最终视图呈现给用户。</li>
 </ol>
+<p>   Path    Description         </p>
+<p>   /app/*.x    匹配(Matches)所有在app路径下的.x文件         </p>
+<p>   /app/p?ttern    匹配(Matches) /app/pattern 和 /app/pXttern,但是不包括/app/pttern         </p>
+<p>   /**/example    匹配(Matches) /app/example, /app/foo/example, 和 /example         </p>
+<p>   /app/**/dir/file.    匹配(Matches) /app/dir/file.jsp, /app/foo/dir/file.html,/app/foo/bar/dir/file.pdf, 和 /app/dir/file.java         </p>
+<p>   /**/*.jsp    匹配(Matches)任何的.jsp 文件</p>
+<h1 id="拦截器"><a href="#拦截器" class="headerlink" title="拦截器"></a>拦截器</h1><p>这个类要实现HandlerInterceptor接口就算成了一个拦截器</p>
+<pre><code class="java">import org.springframework.web.servlet.HandlerInterceptor;
+import org.springframework.web.servlet.ModelAndView;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+public class MyInterceptor implements HandlerInterceptor {
+    //return ture; 执行下一个拦截器，等于就是放行（让你走）
+    //return false; 拦截了，不许走，打劫！
+    @Override
+    public boolean preHandle(HttpServletRequest request,
+                             HttpServletResponse response,
+                             Object handler) throws Exception {
+        System.out.println(&quot;============拦截前============&quot;);
+        return true;
+    }
+    //后面两个方法用来加日志之类的
+    @Override
+    public void postHandle(HttpServletRequest request,
+                           HttpServletResponse response,
+                           Object handler,
+                           ModelAndView modelAndView) throws Exception {
+        System.out.println(&quot;============拦截后=============&quot;);
+    }
+    @Override
+    public void afterCompletion(HttpServletRequest request,
+                                HttpServletResponse response,
+                                Object handler,
+                                Exception ex) throws Exception {
+        System.out.println(&quot;=============清理战场===========&quot;);
+    }
+}</code></pre>
 
       
        <hr><span style="font-style: italic;color: gray;"> 转载请注明来源，欢迎对文章中的引用来源进行考证，欢迎指出任何有错误或不够清晰的表达。可以在下面评论区评论，也可以邮件至 1044667963@qq.com </span>
@@ -482,12 +553,12 @@
 
 
 <div class="article_copyright">
-    <p><span class="copy-title">文章标题:</span>SpringMVC的执行流程</p>
+    <p><span class="copy-title">文章标题:</span>SpringMVC 拦截器</p>
     
     <p><span class="copy-title">本文作者:</span><a  title="finajoy">finajoy</a></p>
-    <p><span class="copy-title">发布时间:</span>2020-03-21, 21:22:45</p>
-    <p><span class="copy-title">最后更新:</span>2020-03-22, 09:23:07</p>
-    <span class="copy-title">原始链接:</span><a class="post-url" href="/2020/03/21/SpringMVC%E7%9A%84%E6%89%A7%E8%A1%8C%E6%B5%81%E7%A8%8B/" title="SpringMVC的执行流程">https://rsjttlkkywmts.github.io/2020/03/21/SpringMVC%E7%9A%84%E6%89%A7%E8%A1%8C%E6%B5%81%E7%A8%8B/</a>
+    <p><span class="copy-title">发布时间:</span>2020-03-31, 12:25:02</p>
+    <p><span class="copy-title">最后更新:</span>2020-03-31, 12:26:04</p>
+    <span class="copy-title">原始链接:</span><a class="post-url" href="/2020/03/31/SpringMVC-%E6%8B%A6%E6%88%AA%E5%99%A8/" title="SpringMVC 拦截器">https://rsjttlkkywmts.github.io/2020/03/31/SpringMVC-%E6%8B%A6%E6%88%AA%E5%99%A8/</a>
     <p>
         <span class="copy-title">版权声明:</span><i class="fa fa-creative-commons"></i> <a rel="license noopener" href="http://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank" title="CC BY-NC-SA 4.0 International" target = "_blank">"署名-非商用-相同方式共享 4.0"</a> 转载请保留原文链接及作者。
     </p>
